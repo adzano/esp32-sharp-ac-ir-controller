@@ -14,7 +14,7 @@ Status ringkas: MVP IR telah terbukti. ESP32 menerima remote Sharp, mengirim emp
 
 ## Batas sebelum internet/VPS
 
-Firmware MQTT saat ini menggunakan TCP port `1883` untuk broker LAN. Jangan mengarahkannya ke broker publik atau membuka port router. Sebelum VPS dipakai, implementasikan MQTTS pada ESP32 dengan validasi sertifikat serta gunakan `mqtt.smarthome.adzano.my.id:8883` setelah domain dan sertifikat tersedia.
+Firmware MQTT saat ini menggunakan TCP port `1883` untuk broker LAN. Jangan mengarahkannya ke broker publik atau membuka port router. Sebelum VPS dipakai, implementasikan MQTTS pada ESP32 dengan validasi sertifikat serta gunakan `mqtt.elang.my.id:8883` setelah domain dan sertifikat tersedia.
 
 ## 1. Tujuan dan fungsi dokumen
 
