@@ -1,6 +1,6 @@
-# Smart Home IR ESP32
+# ESP32 Sharp AC IR Controller
 
-Kontrol AC Sharp dari iPhone pada jaringan Wi-Fi lokal, memakai ESP32, OLED I2C, receiver IR, dan transmitter IR. Perintah yang dikirim merupakan state asli yang direkam dari remote.
+Firmware ESP32 untuk mengontrol AC Sharp dari iPhone pada jaringan Wi-Fi lokal, memakai OLED I2C, receiver IR, dan transmitter IR. Perintah yang dikirim merupakan state asli yang direkam dari remote.
 
 ## Status saat ini
 
