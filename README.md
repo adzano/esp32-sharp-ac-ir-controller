@@ -50,11 +50,19 @@ arduino-cli lib install IRremoteESP8266 U8g2 --config-file arduino-cli.local.yam
 Contoh build dan upload:
 
 ```sh
-arduino-cli compile --config-file arduino-cli.local.yaml --fqbn esp32:esp32:esp32 firmware/ir_web_control_v1
-arduino-cli upload --config-file arduino-cli.local.yaml --fqbn esp32:esp32:esp32 --port /dev/cu.usbserial-0001 firmware/ir_web_control_v1
+arduino-cli compile --config-file arduino-cli.local.yaml --fqbn esp32:esp32:esp32 firmware/ir_mqtt_control_v1
+arduino-cli upload --config-file arduino-cli.local.yaml --fqbn esp32:esp32:esp32 --port /dev/cu.usbserial-0001 firmware/ir_mqtt_control_v1
 ```
 
 Nama port USB berbeda pada setiap komputer. Tutup serial monitor sebelum upload.
+
+## MQTT VPS terenkripsi
+
+Firmware `ir_mqtt_control_v1` memakai MQTTS ke `mqtt.elang.my.id:8883` dan
+memvalidasi sertifikat Let’s Encrypt. Salin `secrets.example.h` menjadi
+`secrets.h`, lalu isi password MQTT perangkat secara lokal. File `secrets.h`
+diabaikan Git. Jangan menggunakan port `1883` atau menonaktifkan validasi
+sertifikat untuk koneksi melalui internet.
 
 ## Dokumentasi
 

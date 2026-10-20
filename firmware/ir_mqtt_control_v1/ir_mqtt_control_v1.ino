@@ -3,13 +3,16 @@
 #include <PubSubClient.h>
 #include <U8g2lib.h>
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include <Wire.h>
+#include <time.h>
 
 #include <IRremoteESP8266.h>
 #include <IRrecv.h>
 #include <IRsend.h>
 
 #include "secrets.h"
+#include "certificates.h"
 
 constexpr uint16_t kIrReceivePin = 27;
 constexpr uint16_t kIrTransmitPin = 26;
@@ -38,8 +41,8 @@ IRrecv receiver(kIrReceivePin, 1024, 50, true);
 IRsend transmitter(kIrTransmitPin);
 decode_results result;
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C oled(U8G2_R0, U8X8_PIN_NONE);
-WiFiClient wifiClient;
-PubSubClient mqtt(wifiClient);
+WiFiClientSecure mqttTransport;
+PubSubClient mqtt(mqttTransport);
 
 uint8_t selected = 0;
 bool buttonDown = false;
@@ -62,6 +65,17 @@ void publishState() {
   if (!mqtt.connected()) return;
   String state = "{\"online\":true,\"last_preset\":\"" + lastPreset + "\"}";
   mqtt.publish(kStateTopic, state.c_str(), true);
+}
+
+bool synchroniseClock() {
+  time_t now = time(nullptr);
+  if (now > 1700000000) return true;
+
+  draw("CLOCK SYNC", "Preparing TLS...", "Please wait...", "");
+  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+  const uint32_t started = millis();
+  while (time(nullptr) <= 1700000000 && millis() - started < 15000) delay(250);
+  return time(nullptr) > 1700000000;
 }
 
 void sendPreset(uint8_t index) {
@@ -96,7 +110,15 @@ void onMqttMessage(char* topic, uint8_t* payload, unsigned int length) {
 
 void connectMqtt() {
   if (mqtt.connected() || WiFi.status() != WL_CONNECTED) return;
-  if (!mqtt.connect("esp32-sharp-ac-1", kMqttUser, kMqttPassword)) return;
+  if (!synchroniseClock()) {
+    draw("CLOCK SYNC FAILED", "MQTTS unavailable", "Check Wi-Fi", "Retrying...");
+    Serial.println("CLOCK_SYNC_FAILED");
+    return;
+  }
+  if (!mqtt.connect("esp32-sharp-ac-1", kMqttUser, kMqttPassword)) {
+    Serial.printf("MQTT_CONNECT_FAILED state=%d\n", mqtt.state());
+    return;
+  }
   mqtt.subscribe(kCommandTopic, 1);
   publishState();
   drawControl();
@@ -122,6 +144,8 @@ void setup() {
   Serial.begin(115200); delay(500); pinMode(kBootButtonPin, INPUT_PULLUP);
   Wire.begin(kI2cSdaPin, kI2cSclPin); oled.begin(); transmitter.begin();
   receiver.setUnknownThreshold(12); receiver.setTolerance(35); receiver.enableIRIn();
+  mqttTransport.setCACert(kLetsEncryptRootCa);
+  mqttTransport.setTimeout(12000);
   mqtt.setServer(kMqttHost, kMqttPort); mqtt.setCallback(onMqttMessage);
   connectWifi(); connectMqtt(); drawControl();
 }

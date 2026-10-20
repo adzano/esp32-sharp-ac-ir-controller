@@ -14,7 +14,11 @@ Status ringkas: MVP IR telah terbukti. ESP32 menerima remote Sharp, mengirim emp
 
 ## Batas sebelum internet/VPS
 
-Firmware MQTT saat ini menggunakan TCP port `1883` untuk broker LAN. Jangan mengarahkannya ke broker publik atau membuka port router. Sebelum VPS dipakai, implementasikan MQTTS pada ESP32 dengan validasi sertifikat serta gunakan `mqtt.elang.my.id:8883` setelah domain dan sertifikat tersedia.
+Firmware MQTT memakai MQTTS dengan validasi sertifikat Let’s Encrypt pada
+`mqtt.elang.my.id:8883`. Jangan mengarahkannya ke broker publik tanpa TLS atau
+membuka port router. Salin `secrets.example.h` menjadi `secrets.h`, masukkan
+kredensial perangkat lokal, lalu upload firmware MQTTS sebelum perangkat
+terhubung ke VPS.
 
 ## 1. Tujuan dan fungsi dokumen
 
@@ -78,7 +82,7 @@ Backend, MQTT, VPS, dashboard, integrasi BARDI, OTA, dan automasi belum menjadi 
 | Backend | FastAPI/Python dengan SQLite awal | Implementasi lokal dan autentikasi session sudah tersedia; deploy VPS belum dilakukan |
 | Messaging | MQTT; Mosquitto | Broker LAN dan command bridge sudah terbukti; TLS VPS belum diterapkan |
 | Frontend | Vanilla awal, migrasi React + Vite/PWA | Web UI proof of concept telah bekerja lokal |
-| Akses internet | VPS, HTTPS, autentikasi, MQTT TLS | Backend dan template deploy siap; DNS, TLS, MQTTS firmware, serta deploy masih tertunda |
+| Akses internet | VPS, HTTPS, autentikasi, MQTT TLS | Backend VPS, DNS, HTTPS, MQTTS port 8883, dan firmware TLS siap; konfigurasi rahasia perangkat serta upload masih diperlukan |
 | Kontrol lokal saat internet mati | Jalur lokal yang dapat digunakan tanpa VPS | Kebutuhan; desain belum dipilih |
 | Integrasi BARDI | Evaluasi Tuya Cloud atau integrasi lokal berdasarkan perangkat | Belum diputuskan |
 | Home Assistant | Alternatif hub untuk dievaluasi bila membantu | Bukan dependensi MVP |
