@@ -29,6 +29,8 @@ Gunakan GND yang sama untuk semua modul. OLED dan receiver tetap memakai 3,3 V. 
 
 Saat belum ada Wi-Fi tersimpan, hubungkan ponsel ke access point tersebut, lalu buka `http://192.168.4.1`. Setelah Wi-Fi rumah tersimpan, alamat IP perangkat muncul pada OLED.
 
+Untuk kontrol melalui backend, gunakan [`firmware/ir_mqtt_control_v1/ir_mqtt_control_v1.ino`](firmware/ir_mqtt_control_v1/ir_mqtt_control_v1.ino). Firmware ini memakai Wi-Fi yang sebelumnya tersimpan, menerima command MQTT, dan tetap menyediakan kontrol OLED/tombol BOOT. Salin `secrets.example.h` menjadi `secrets.h`, lalu isi host serta kredensial broker lokal sebelum build.
+
 ## Menyiapkan Arduino CLI
 
 Salin konfigurasi contoh menjadi konfigurasi lokal, lalu sesuaikan path jika diperlukan:

@@ -7,3 +7,4 @@ arduino-cli.local.yaml
 .env
 .env.*
 !.env.example
+firmware/**/secrets.h
