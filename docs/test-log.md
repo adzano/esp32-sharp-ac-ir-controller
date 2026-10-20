@@ -176,4 +176,10 @@ Setelah CANCEL, frame kembali menjadi AA5ACF10008120000F80C0E021 tanpa overflow 
 - Keempat profil AC dapat dipilih dari halaman tersebut. Pada uji jarak dekat, seluruh perintah diterima AC.
 - Jika transmitter digeser atau ditempatkan lebih jauh, penerimaan AC masih sesekali tidak konsisten. Ini membatasi keandalan pada kekuatan dan arah pancaran modul transmitter saat ini, bukan koneksi Wi-Fi atau logika kontrol.
 
+### Kontrol MQTT v1 berhasil
+
+- Backend, broker MQTT lokal, dan ESP32 terhubung. Keempat preset yang sama dengan Web UI telah diterbitkan melalui MQTT dan diterima firmware ESP32.
+- Pengguna mengonfirmasi LED transmitter menyala tiga kali setiap tombol Web UI ditekan untuk seluruh empat preset.
+- Respons fisik AC belum diuji pada tahap ini karena penggunaan listrik sedang tinggi. Hasil ini memverifikasi pengiriman command sampai transmitter, bukan penerimaan IR oleh unit AC.
+
 Empat capture berikutnya (serial ID 3–6) semuanya SHARP_AC 104 bit tanpa overflow, urutan 19→20→19→20°C tepat. State untuk tiap suhu identik dengan capture sebelumnya. Dengan pasangan sebelumnya, total enam dari enam capture setelah penyesuaian berhasil, masing-masing tiga sampel per suhu. Raw tersimpan sebagai sharp-007.txt sampai sharp-010.txt. Ini memvalidasi penerimaan suhu pada posisi uji saat ini, bukan seluruh fitur/jangkauan. Fan tetap UNKNOWN; pengiriman ke AC belum diuji.
