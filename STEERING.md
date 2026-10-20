@@ -1,7 +1,20 @@
 # Steering — DIY Smart Home IoT
 
-Tanggal acuan: 18 Oktober 2026
-Status: setup ESP32 pada Mac serta uji build, upload, dan serial berhasil. Pengujian IR belum dimulai; uji cabut-pasang USB masih perlu dilakukan.
+Tanggal acuan: 20 Oktober 2026
+Status ringkas: MVP IR telah terbukti. ESP32 menerima remote Sharp, mengirim empat preset AC yang diterima unit pada jarak dekat, memiliki kontrol Wi-Fi lokal serta MQTT LAN, dan OLED/tombol BOOT berfungsi. Bagian rencana awal di bawah tetap berguna sebagai riwayat, tetapi status ringkas dan riwayat terbaru menjadi sumber kebenaran bila ada perbedaan.
+
+## Status integrasi saat ini
+
+- Wiring aktif: receiver DATA→GPIO27, transmitter DAT→GPIO26, OLED SDA→GPIO21 dan SCL→GPIO22, semua memakai GND bersama. Receiver dan OLED memakai 3,3 V; transmitter memakai VIN/5 V.
+- Firmware terpisah tersedia untuk capture, kontrol Wi-Fi lokal, dan MQTT. Firmware MQTT aktif ada di `firmware/ir_mqtt_control_v1`.
+- MQTT LAN memakai topik `smarthome/ac-sharp-1/command` dan `smarthome/ac-sharp-1/state`, dengan empat preset yang tercantum pada kode.
+- Backend dan Web UI lokal sudah memicu LED transmitter pada seluruh preset.
+- Jangkauan transmitter bawaan belum andal pada jarak/sudut lebih jauh. Untuk instalasi permanen, gunakan IR LED 940 nm berdaya lebih tinggi dengan driver transistor/MOSFET dan suplai yang sesuai.
+- Jangan menyimpan `secrets.h`, password Wi-Fi, atau password MQTT di Git.
+
+## Batas sebelum internet/VPS
+
+Firmware MQTT saat ini menggunakan TCP port `1883` untuk broker LAN. Jangan mengarahkannya ke broker publik atau membuka port router. Sebelum VPS dipakai, implementasikan MQTTS pada ESP32 dengan validasi sertifikat serta gunakan `mqtt.smarthome.adzano.my.id:8883` setelah domain dan sertifikat tersedia.
 
 ## 1. Tujuan dan fungsi dokumen
 
@@ -62,10 +75,10 @@ Backend, MQTT, VPS, dashboard, integrasi BARDI, OTA, dan automasi belum menjadi 
 | Kontrol AC | Meniru perintah remote melalui IR eksternal | Ditetapkan |
 | Library IR | IRremoteESP8266 | Kandidat; kompatibilitas board dan remote perlu diuji |
 | Framework / tool firmware | Arduino framework; Arduino IDE atau PlatformIO | Dipilih saat persiapan Mac berdasarkan kompatibilitas dan kemudahan uji |
-| Backend | Node.js | Arah awal, implementasi setelah IR terbukti |
-| Messaging | MQTT; Mosquitto sebagai kandidat broker | Arah awal |
-| Frontend | Next.js dengan target PWA di iPhone | Arah awal |
-| Akses internet | VPS, HTTPS, autentikasi, MQTT TLS | Rencana tahap lanjutan |
+| Backend | FastAPI/Python dengan SQLite awal | Implementasi lokal dan autentikasi session sudah tersedia; deploy VPS belum dilakukan |
+| Messaging | MQTT; Mosquitto | Broker LAN dan command bridge sudah terbukti; TLS VPS belum diterapkan |
+| Frontend | Vanilla awal, migrasi React + Vite/PWA | Web UI proof of concept telah bekerja lokal |
+| Akses internet | VPS, HTTPS, autentikasi, MQTT TLS | Backend dan template deploy siap; DNS, TLS, MQTTS firmware, serta deploy masih tertunda |
 | Kontrol lokal saat internet mati | Jalur lokal yang dapat digunakan tanpa VPS | Kebutuhan; desain belum dipilih |
 | Integrasi BARDI | Evaluasi Tuya Cloud atau integrasi lokal berdasarkan perangkat | Belum diputuskan |
 | Home Assistant | Alternatif hub untuk dievaluasi bila membantu | Bukan dependensi MVP |
