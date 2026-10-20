@@ -1,0 +1,9 @@
+.tools/
+build/
+.DS_Store
+arduino-cli.local.yaml
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
