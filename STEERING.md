@@ -20,6 +20,11 @@ membuka port router. Salin `secrets.example.h` menjadi `secrets.h`, masukkan
 kredensial perangkat lokal, lalu upload firmware MQTTS sebelum perangkat
 terhubung ke VPS.
 
+Pada 20 Oktober 2026, firmware MQTTS berhasil diupload ke ESP32 dan broker
+VPS menerima status retained `{"online":true,"last_preset":""}`. Kredensial
+MQTT telah dirotasi saat tahap ini dan hanya disimpan pada `secrets.h` lokal
+serta konfigurasi privat VPS.
+
 ## 1. Tujuan dan fungsi dokumen
 
 Membangun sistem smart home pribadi untuk mengendalikan AC Sharp dan BARDI Smart LED melalui satu dashboard/PWA di iPhone. Target akhirnya mencakup kontrol melalui jaringan lokal dan internet, jadwal, serta automasi yang dapat diperluas.
